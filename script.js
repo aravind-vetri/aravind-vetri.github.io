@@ -1,136 +1,404 @@
-// Initialize AOS Animation
-AOS.init({
-    duration: 1000,
-    once: true
-});
+/*=========================================
+PREMIUM PORTFOLIO JAVASCRIPT
+=========================================*/
 
-// Typing Effect
-const text = "HR Professional | HR Generalist | Compliance | Recruitment";
-let i = 0;
+document.addEventListener("DOMContentLoaded", function () {
 
-function typingEffect() {
-    const heroTitle = document.querySelector(".hero h3");
-    if (!heroTitle) return;
+    /*=========================================
+    LOADER
+    =========================================*/
 
-    heroTitle.innerHTML = "";
+    window.addEventListener("load", function () {
 
-    function type() {
-        if (i < text.length) {
-            heroTitle.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, 60);
-        }
-    }
+        const loader = document.getElementById("loader");
 
-    type();
-}
+        loader.style.opacity = "0";
 
-window.onload = typingEffect;
+        setTimeout(function () {
 
-// Navbar Background Change
-window.addEventListener("scroll", function () {
-    const navbar = document.querySelector(".navbar");
+            loader.style.display = "none";
 
-    if (window.scrollY > 50) {
-        navbar.style.background = "#0a3d62";
-    } else {
-        navbar.style.background = "rgba(10,61,98,.95)";
-    }
-});
-
-// Scroll to Top Button
-const topBtn = document.createElement("button");
-
-topBtn.innerHTML = "↑";
-topBtn.id = "topBtn";
-
-document.body.appendChild(topBtn);
-
-topBtn.style.position = "fixed";
-topBtn.style.bottom = "20px";
-topBtn.style.right = "20px";
-topBtn.style.width = "50px";
-topBtn.style.height = "50px";
-topBtn.style.borderRadius = "50%";
-topBtn.style.border = "none";
-topBtn.style.background = "#ffc107";
-topBtn.style.color = "#000";
-topBtn.style.fontSize = "22px";
-topBtn.style.cursor = "pointer";
-topBtn.style.display = "none";
-topBtn.style.boxShadow = "0 10px 25px rgba(0,0,0,.25)";
-topBtn.style.zIndex = "999";
-
-window.addEventListener("scroll", function () {
-
-    if (window.scrollY > 300) {
-
-        topBtn.style.display = "block";
-
-    } else {
-
-        topBtn.style.display = "none";
-
-    }
-
-});
-
-topBtn.onclick = function () {
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
+        }, 800);
 
     });
 
-};
+    /*=========================================
+    CURSOR GLOW
+    =========================================*/
 
-// Dark Mode Button
+    const cursor = document.querySelector(".cursor");
 
-const darkBtn = document.createElement("button");
+    document.addEventListener("mousemove", function (e) {
 
-darkBtn.innerHTML = "🌙";
+        cursor.style.left = e.clientX + "px";
 
-document.body.appendChild(darkBtn);
+        cursor.style.top = e.clientY + "px";
 
-darkBtn.style.position = "fixed";
-darkBtn.style.bottom = "80px";
-darkBtn.style.right = "20px";
-darkBtn.style.width = "50px";
-darkBtn.style.height = "50px";
-darkBtn.style.borderRadius = "50%";
-darkBtn.style.border = "none";
-darkBtn.style.cursor = "pointer";
-darkBtn.style.background = "#0a3d62";
-darkBtn.style.color = "#fff";
-darkBtn.style.fontSize = "20px";
-darkBtn.style.boxShadow = "0 10px 25px rgba(0,0,0,.25)";
-darkBtn.style.zIndex = "999";
+    });
 
-darkBtn.onclick = function(){
+    /*=========================================
+    NAVBAR BACKGROUND
+    =========================================*/
 
-document.body.classList.toggle("dark-mode");
+    const navbar = document.querySelector(".navbar");
 
-if(document.body.classList.contains("dark-mode")){
+    window.addEventListener("scroll", function () {
 
-document.body.style.background="#111";
-document.body.style.color="#fff";
+        if (window.scrollY > 80) {
 
-document.querySelectorAll(".card").forEach(card=>{
+            navbar.style.background = "rgba(5,8,22,.95)";
 
-card.style.background="#1c1c1c";
-card.style.color="#fff";
+            navbar.style.boxShadow = "0 15px 40px rgba(0,0,0,.4)";
+
+        } else {
+
+            navbar.style.background = "rgba(0,0,0,.35)";
+
+            navbar.style.boxShadow = "none";
+
+        }
+
+    });
+
+    /*=========================================
+    TYPING EFFECT
+    =========================================*/
+
+    const typing = document.getElementById("typing");
+
+    if (typing) {
+
+        const words = [
+
+            "HR Professional",
+
+            "HR Generalist",
+
+            "Recruitment Specialist",
+
+            "Payroll Executive",
+
+            "Compliance Executive"
+
+        ];
+
+        let wordIndex = 0;
+
+        let letterIndex = 0;
+
+        let deleting = false;
+
+        function typeEffect() {
+
+            const current = words[wordIndex];
+
+            if (!deleting) {
+
+                typing.textContent = current.substring(0, letterIndex);
+
+                letterIndex++;
+
+                if (letterIndex > current.length) {
+
+                    deleting = true;
+
+                    setTimeout(typeEffect, 1200);
+
+                    return;
+
+                }
+
+            } else {
+
+                typing.textContent = current.substring(0, letterIndex);
+
+                letterIndex--;
+
+                if (letterIndex < 0) {
+
+                    deleting = false;
+
+                    wordIndex++;
+
+                    if (wordIndex >= words.length)
+
+                        wordIndex = 0;
+
+                }
+
+            }
+
+            setTimeout(typeEffect, deleting ? 50 : 100);
+
+        }
+
+        typeEffect();
+
+    }
+
+    /*=========================================
+    REVEAL ANIMATION
+    =========================================*/
+
+    const observer = new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+                entry.target.style.opacity = "1";
+
+                entry.target.style.transform = "translateY(0)";
+
+            }
+
+        });
+
+    }, {
+
+        threshold: 0.15
+
+    });
+
+    document.querySelectorAll("section").forEach(section => {
+
+        section.style.opacity = "0";
+
+        section.style.transform = "translateY(80px)";
+
+        section.style.transition = "1s";
+
+        observer.observe(section);
+
+    });
+
+});
+/*=========================================
+SKILL BAR ANIMATION
+=========================================*/
+
+const skillBars = document.querySelectorAll(".progress-bar");
+
+const skillObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const bar = entry.target;
+
+            bar.style.width = bar.dataset.width;
+
+        }
+
+    });
+
+}, { threshold: 0.4 });
+
+skillBars.forEach(bar => {
+
+    skillObserver.observe(bar);
 
 });
 
-document.querySelector("footer").style.background="#000";
+/*=========================================
+COUNTER ANIMATION
+=========================================*/
 
-}else{
+const counters = document.querySelectorAll(".counter");
 
-location.reload();
+const counterObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+            const counter = entry.target;
+
+            const target = +counter.dataset.target;
+
+            let count = 0;
+
+            const speed = target / 80;
+
+            const update = () => {
+
+                if (count < target) {
+
+                    count += speed;
+
+                    counter.innerText = Math.ceil(count);
+
+                    requestAnimationFrame(update);
+
+                } else {
+
+                    counter.innerText = target;
+
+                }
+
+            };
+
+            update();
+
+        }
+
+    });
+
+}, { threshold: 0.5 });
+
+counters.forEach(counter => {
+
+    counterObserver.observe(counter);
+
+});
+
+/*=========================================
+SMOOTH SCROLL
+=========================================*/
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+
+    anchor.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        const target = document.querySelector(this.getAttribute("href"));
+
+        if (target) {
+
+            target.scrollIntoView({
+
+                behavior: "smooth"
+
+            });
+
+        }
+
+    });
+
+});
+
+/*=========================================
+SCROLL TO TOP BUTTON
+=========================================*/
+
+const scrollBtn = document.getElementById("scrollTop");
+
+window.addEventListener("scroll", function () {
+
+    if (window.scrollY > 400) {
+
+        scrollBtn.style.display = "block";
+
+    } else {
+
+        scrollBtn.style.display = "none";
+
+    }
+
+});
+
+scrollBtn.addEventListener("click", function () {
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+});
+
+/*=========================================
+ACTIVE NAVIGATION
+=========================================*/
+
+const sections = document.querySelectorAll("section");
+
+const navLinks = document.querySelectorAll(".nav-link");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 150;
+
+        if (pageYOffset >= sectionTop) {
+
+            current = section.getAttribute("id");
+
+        }
+
+    });
+
+    navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+});
+
+/*=========================================
+CONTACT FORM
+=========================================*/
+
+const form = document.querySelector("form");
+
+if (form) {
+
+    form.addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        alert("Thank you! Your message has been submitted.");
+
+        form.reset();
+
+    });
 
 }
 
-};
+/*=========================================
+FLOATING PROFILE IMAGE
+=========================================*/
+
+const profile = document.querySelector(".profile-box");
+
+if (profile) {
+
+    setInterval(() => {
+
+        profile.animate([
+
+            { transform: "translateY(0px)" },
+
+            { transform: "translateY(-12px)" },
+
+            { transform: "translateY(0px)" }
+
+        ], {
+
+            duration: 3000,
+
+            iterations: 1
+
+        });
+
+    }, 3000);
+
+}
+
+/*=========================================
+END OF SCRIPT
+=========================================*/
